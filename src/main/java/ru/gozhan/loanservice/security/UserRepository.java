@@ -1,13 +1,13 @@
-package ru.gozhan.loanservice.authv2;
+package ru.gozhan.loanservice.security;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<UserInfo, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<UserInfo> findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
-    UserInfo save(UserInfo userInfo);
+    User save(User user);
 
 }

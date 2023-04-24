@@ -1,4 +1,4 @@
-package ru.gozhan.loanservice.authv2;
+package ru.gozhan.loanservice.security;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

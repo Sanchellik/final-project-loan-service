@@ -1,4 +1,4 @@
-package ru.gozhan.loanservice.authv2;
+package ru.gozhan.loanservice.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,9 +15,9 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public UserDetailsImpl(UserInfo userInfo) {
-        password = userInfo.getPassword();
-        authorities = Arrays.stream(userInfo.getRoles().split(","))
+    public UserDetailsImpl(User user) {
+        password = user.getPassword();
+        authorities = Arrays.stream(user.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

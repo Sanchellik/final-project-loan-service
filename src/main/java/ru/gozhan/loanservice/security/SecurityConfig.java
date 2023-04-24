@@ -1,4 +1,4 @@
-package ru.gozhan.loanservice.authv2;
+package ru.gozhan.loanservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserInfoUserDetailsService();
+        return new UserDetailsServiceImpl();
     }
 
 //    @Bean

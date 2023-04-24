@@ -31,11 +31,5 @@ public class TariffController {
 
         return ResponseEntity.ok(response);
     }
-//    public ResponseEntity<List<Tariff>> getAllTariffs() {
-//        List<Tariff> tariffs = tariffService.getAllTariffs();
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                .body(tariffs);
-//    }
 
 }

@@ -40,8 +40,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .and().logout()
-                .and()
-                .build();
+//                .and().httpBasic()
+                .and().build();
     }
 
     @Bean

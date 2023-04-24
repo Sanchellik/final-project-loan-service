@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loan-service
+    username: postgres
+    password: 123
+  liquibase:
+    enabled: true
+    changeLog: classpath:/db/changelog/liquibase.yaml
+    drop-first: true
+
+#  thymeleaf:
+#    prefix: classpath:/templates/
+#    suffix: .html
+
+#  jpa:
+#    hibernate:
+#      ddlAuto: update
+#      naming:
+#        physicalStrategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQL82Dialect

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: Gozhan
+      changes:
+        - insert:
+            tableName: usr
+            columns:
+              - column:
+                  name: username
+                  value: "sasha"
+              - column:
+                  name: password
+                  value: "$2a$12$Px8eC.qn6KXQWzn3zZWcUeYyGKjwJCvsAfKi/N9Z6/j3lOaZ8zbsC"
+              - column:
+                  name: roles
+                  value: "ROLE_USER"

@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-tariffs
+      author: Gozhan
+      changes:
+        - insert:
+            tableName: tariff
+            columns:
+              - column:
+                  name: type
+                  value: "CONSUMER"
+              - column:
+                  name: interest_rate
+                  value: "11.9%"
+        - insert:
+            tableName: tariff
+            columns:
+              - column:
+                  name: type
+                  value: "MORTGAGE"
+              - column:
+                  name: interest_rate
+                  value: "5.9%"
+        - insert:
+            tableName: tariff
+            columns:
+              - column:
+                  name: type
+                  value: "CAR LOAN"
+              - column:
+                  name: interest_rate
+                  value: "19.2%"

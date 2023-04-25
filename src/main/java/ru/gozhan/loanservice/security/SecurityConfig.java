@@ -37,10 +37,13 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/loan-service").permitAll()
+                .requestMatchers("/loan-service/getTariffs-view").permitAll()
+                .requestMatchers("/loan-service/getTariffs").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin()
-                .and().logout()
-//                .and().httpBasic()
+//                .and().formLogin()
+//                .and().logout()
+                .and().httpBasic()
                 .and().build();
     }
 

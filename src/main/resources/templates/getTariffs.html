@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Our tariffs</title>
+</head>
+<body>
+<h1>Мы можем предложить следующие тарифы</h1>
+<table>
+    <thead>
+    <tr>
+        <th> №</th>
+        <th> Тип</th>
+        <th> Процентная ставка</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${tariffs.empty}">
+        <td colspan="2"> No Tariffs Available</td>
+    </tr>
+    <tr th:each="tariff : ${tariffs}">
+        <td><span th:text="${tariff.id}"> Id </span></td>
+        <td><span th:text="${tariff.type}"> Type </span></td>
+        <td><span th:text="${tariff.interestRate}"> Interest rate </span></td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="http://localhost:8080/loan-service/getTariffs">
+    <button>Посмотреть JSON</button>
+</a>
+
+<br>
+
+<a href="http://localhost:8080/loan-service">
+    <button>На главную</button>
+</a>
+</body>
+</html>

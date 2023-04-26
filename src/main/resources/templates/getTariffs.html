@@ -9,22 +9,32 @@
 <body>
 <div class="container">
     <h1 class="text-center mt-5">Мы можем предложить следующие тарифы</h1>
-    <table class="table table-striped mt-4">
+    <table class="table table-striped table-fixed mt-4">
+        <colgroup>
+            <col style="width: 20%">
+            <col style="width: 30%">
+            <col style="width: 30%">
+            <col style="width: 20%">
+        </colgroup>
         <thead>
         <tr>
             <th>№</th>
             <th>Тип</th>
             <th>Процентная ставка</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${tariffs.empty}">
-            <td colspan="3">No Tariffs Available</td>
+            <td colspan="4">No Tariffs Available</td>
         </tr>
         <tr th:each="tariff : ${tariffs}">
             <td><span th:text="${tariff.id}">Id</span></td>
             <td><span th:text="${tariff.type}">Type</span></td>
             <td><span th:text="${tariff.interestRate}">Interest rate</span></td>
+            <td>
+                <a th:href="@{${'/loan-service/getLoan?id=' + tariff.id}}" class="btn btn-success">Взять этот кредит</a>
+            </td>
         </tr>
         </tbody>
     </table>

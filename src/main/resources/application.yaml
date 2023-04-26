@@ -7,6 +7,9 @@ spring:
     enabled: true
     changeLog: classpath:/db/changelog/liquibase.yaml
 #    drop-first: true
+  devtools:
+    restart:
+      enabled: true
 
 #  thymeleaf:
 #    prefix: classpath:/templates/

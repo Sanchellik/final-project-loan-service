@@ -2,8 +2,10 @@ package ru.gozhan.loanservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,29 +24,19 @@ public class SecurityConfig {
         return new UserDetailsServiceImpl();
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http.csrf().disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/products/welcome", "/products/new").permitAll()
-//                .and()
-//                .authorizeHttpRequests().requestMatchers("/products/**")
-//                .authenticated().and().formLogin().and().build();
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+        httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/loan-service").permitAll()
+                .requestMatchers("/loan-service/auth/**").permitAll()
                 .requestMatchers("/loan-service/getTariffs-view").permitAll()
                 .requestMatchers("/loan-service/getTariffs").permitAll()
                 .anyRequest().authenticated()
-//                .and().formLogin()
-//                .and().logout()
-                .and().httpBasic()
-                .and().build();
+                .and().httpBasic();
+
+        return httpSecurity.build();
     }
 
     @Bean
@@ -58,6 +50,12 @@ public class SecurityConfig {
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 }

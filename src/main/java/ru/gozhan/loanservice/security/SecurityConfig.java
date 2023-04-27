@@ -1,42 +1,49 @@
 package ru.gozhan.loanservice.security;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl();
-    }
+    private final DataSource dataSource;
+
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+//    @Bean
+//    public UserDetailsService userDetailsService() throws Exception {
+//        return new UserDetailsServiceImpl(jdbcUserDetailsManager());
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+        return httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/loan-service").permitAll()
+                .requestMatchers("/loan-service").authenticated()
                 .requestMatchers("/loan-service/auth/**").permitAll()
                 .requestMatchers("/loan-service/getTariffs-view").permitAll()
                 .requestMatchers("/loan-service/getTariffs").permitAll()
                 .anyRequest().authenticated()
-                .and().httpBasic();
-
-        return httpSecurity.build();
+                .and().formLogin()
+//                .and().httpBasic()
+                .and().build();
     }
 
     @Bean
@@ -45,16 +52,47 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
+
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+                "SELECT username, password, enabled FROM usr WHERE username = ?"
+        );
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+                "SELECT username, 'ROLE_USER' FROM usr WHERE username = ?"
+        );
+        jdbcUserDetailsManager.setCreateUserSql(
+                "INSERT INTO usr (username, password, enabled, account_non_expired, " +
+                        "credentials_non_expired, account_non_locked) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        jdbcUserDetailsManager.setChangePasswordSql(
+                "UPDATE usr SET password = ? WHERE username = ?"
+        );
+        jdbcUserDetailsManager.setDeleteUserSql(
+                "DELETE FROM usr WHERE username = ?"
+        );
+
+        return jdbcUserDetailsManager;
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() throws Exception {
+
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
+
+        authenticationProvider.setUserDetailsService(jdbcUserDetailsManager());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
+
         return authenticationProvider;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
+
         return authenticationConfiguration.getAuthenticationManager();
     }
 

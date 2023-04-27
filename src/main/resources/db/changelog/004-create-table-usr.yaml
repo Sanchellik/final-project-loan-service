@@ -8,23 +8,27 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigserial
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
-                    nullable: false
               - column:
                   name: username
-                  type: varchar(255)
+                  type: VARCHAR(50)
                   constraints:
                     unique: true
-                    nullable: false
               - column:
                   name: password
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
+                  type: VARCHAR(255)
               - column:
-                  name: roles
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
+                  name: enabled
+                  type: BOOLEAN
+              - column:
+                  name: account_non_expired
+                  type: BOOLEAN
+              - column:
+                  name: credentials_non_expired
+                  type: BOOLEAN
+              - column:
+                  name: account_non_locked
+                  type: BOOLEAN

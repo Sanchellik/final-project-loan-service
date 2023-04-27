@@ -6,7 +6,7 @@ spring:
   liquibase:
     enabled: true
     changeLog: classpath:/db/changelog/liquibase.yaml
-#    drop-first: true
+#    drop-first-on-migrate: true
   devtools:
     restart:
       enabled: true

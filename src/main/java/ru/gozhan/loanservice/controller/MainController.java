@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-    @GetMapping("/loan-service")
+    @GetMapping("/")
     public String index() {
         return "redirect:loan-service.html";
     }

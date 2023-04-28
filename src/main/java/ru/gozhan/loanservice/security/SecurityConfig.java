@@ -3,9 +3,7 @@ package ru.gozhan.loanservice.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,7 +22,7 @@ public class SecurityConfig {
 
     private final DataSource dataSource;
 
-    private final AuthenticationConfiguration authenticationConfiguration;
+//    private final AuthenticationConfiguration authenticationConfiguration;
 
 //    @Bean
 //    public UserDetailsService userDetailsService() throws Exception {
@@ -35,15 +33,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/loan-service").authenticated()
-                .requestMatchers("/loan-service/auth/**").permitAll()
-                .requestMatchers("/loan-service/getTariffs-view").permitAll()
-                .requestMatchers("/loan-service/getTariffs").permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin()
-//                .and().httpBasic()
-                .and().build();
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/", "/loan-service.html").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin()
+                    .defaultSuccessUrl("/loan-service/getTariffs-view")
+                    .permitAll()
+                .and()
+                .logout()
+                    .logoutSuccessUrl("/")
+                    .deleteCookies("JSESSIONID")
+                    .invalidateHttpSession(true)
+                .and()
+                .build();
     }
 
     @Bean
@@ -56,7 +59,7 @@ public class SecurityConfig {
 
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+//        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         jdbcUserDetailsManager.setUsersByUsernameQuery(
                 "SELECT username, password, enabled FROM usr WHERE username = ?"
         );
@@ -89,11 +92,11 @@ public class SecurityConfig {
         return authenticationProvider;
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
-
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(
+//            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 
 }

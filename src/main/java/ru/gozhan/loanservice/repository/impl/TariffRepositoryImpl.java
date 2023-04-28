@@ -15,12 +15,12 @@ public class TariffRepositoryImpl implements TariffRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final String SELECT_ALL_QUERY = "SELECT * FROM tariff";
+    private final String DEF_FIND_TARIFFS_SQL = "SELECT * FROM tariff";
 
     @Override
     public List<Tariff> getAllTariffs() {
         return namedParameterJdbcTemplate.query(
-                SELECT_ALL_QUERY,
+                DEF_FIND_TARIFFS_SQL,
                 new BeanPropertyRowMapper<>(Tariff.class));
     }
 

@@ -1,4 +1,4 @@
-package ru.gozhan.loanservice.response;
+package ru.gozhan.loanservice.response.tariff;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

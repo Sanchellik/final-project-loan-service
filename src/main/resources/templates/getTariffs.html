@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Our tariffs</title>
@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <h1 class="text-center mt-5">Мы можем предложить следующие тарифы</h1>
-    <table id="tariffTable" class="table table-striped table-fixed mt-4">
+    <table class="table table-striped table-fixed mt-4">
         <colgroup>
             <col style="width: 20%">
             <col style="width: 30%">
@@ -25,13 +25,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td colspan="4">Loading tariffs...</td>
+        <tr th:if="${tariffs.isEmpty()}">
+            <td colspan="4">No Tariffs Available</td>
+        </tr>
+        <tr th:each="tariff : ${tariffs}">
+            <td><span th:text="${tariff.id}">Id</span></td>
+            <td><span th:text="${tariff.type}">Type</span></td>
+            <td><span th:text="${tariff.interestRate}">Interest rate</span></td>
+            <td>
+                <a th:href="@{${'/loan-service/makeOrder/' + tariff.id}}" class="btn btn-success">Взять этот кредит</a>
+            </td>
         </tr>
         </tbody>
     </table>
-
-    <br>
 
     <div class="text-center">
         <a href="http://localhost:8080/loan-service/getTariffs" class="btn btn-primary">
@@ -52,35 +58,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $.ajax({
-            url: "/loan-service/getTariffs",
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                var data = response.data;
-                // обработка данных и отображение на странице
-                var tariffTable = $("#tariffTable tbody");
-                tariffTable.empty(); // очистка таблицы перед заполнением новыми данными
-                if (data.tariffs.length == 0) {
-                    tariffTable.append("<tr><td colspan='4'>No tariffs available</td></tr>");
-                } else {
-                    $.each(data.tariffs, function(index, tariff) {
-                        tariffTable.append("<tr><td>" + tariff.id + "</td><td>" + tariff.type + "</td><td>" + tariff.interest_rate + "</td><td><a href='/loan-service/getLoan?id=" + tariff.id + "' class='btn btn-success'>Взять этот кредит</a></td></tr>");
-                    });
-                }
-            },
-
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-    });
-</script>
-
-
 
 </body>
 </html>

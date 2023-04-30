@@ -8,4 +8,6 @@ public interface TariffRepository {
 
     List<Tariff> getAllTariffs();
 
+    boolean existsById(Long id);
+
 }

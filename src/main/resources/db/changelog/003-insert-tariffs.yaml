@@ -26,7 +26,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: type
-                  value: "CAR LOAN"
+                  value: "CAR"
               - column:
                   name: interest_rate
                   value: "19.2%"

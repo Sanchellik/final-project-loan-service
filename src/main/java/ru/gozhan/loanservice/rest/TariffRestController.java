@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.gozhan.loanservice.model.Tariff;
 import ru.gozhan.loanservice.response.Response;
 import ru.gozhan.loanservice.response.SuccessResponse;
-import ru.gozhan.loanservice.response.TariffsResponse;
+import ru.gozhan.loanservice.response.tariff.TariffsResponse;
 import ru.gozhan.loanservice.service.TariffService;
 
 import java.util.List;
@@ -32,12 +32,14 @@ public class TariffRestController {
 //    }
     @GetMapping("getTariffs")
     public ResponseEntity<Response> getAllTariffs() {
-        List<Tariff> tariffs = tariffService.getAllTariffs();
+        List<Tariff> tariffList = tariffService.getAllTariffs();
 
         return new ResponseEntity<>(
                 SuccessResponse.<TariffsResponse>builder().data(
-                                TariffsResponse.builder().tariffs(tariffs).build())
-                        .build(), HttpStatus.OK);
+                                TariffsResponse.builder().tariffs(tariffList).build()
+                        )
+                        .build(), HttpStatus.OK
+        );
     }
 
 }

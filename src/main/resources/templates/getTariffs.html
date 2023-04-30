@@ -59,7 +59,8 @@
             url: "/loan-service/getTariffs",
             type: "GET",
             dataType: "json",
-            success: function(data) {
+            success: function(response) {
+                var data = response.data;
                 // обработка данных и отображение на странице
                 var tariffTable = $("#tariffTable tbody");
                 tariffTable.empty(); // очистка таблицы перед заполнением новыми данными
@@ -78,6 +79,7 @@
         });
     });
 </script>
+
 
 
 </body>

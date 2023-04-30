@@ -1,19 +1,18 @@
 package ru.gozhan.loanservice.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gozhan.loanservice.model.Tariff;
-
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TariffsResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SuccessResponse<T> implements Response {
 
-    private List<Tariff> tariffs;
+    private T data;
 
 }

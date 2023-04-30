@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.gozhan.loanservice.model.Tariff;
 import ru.gozhan.loanservice.response.Response;
 import ru.gozhan.loanservice.response.SuccessResponse;
-import ru.gozhan.loanservice.response.tariff.TariffsResponse;
+import ru.gozhan.loanservice.response.tariff.TariffResponse;
+import ru.gozhan.loanservice.response.tariff.TariffsArrayResponse;
 import ru.gozhan.loanservice.service.TariffService;
+import ru.gozhan.loanservice.util.TariffMapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/loan-service")
@@ -21,25 +24,20 @@ public class TariffRestController {
 
     private final TariffService tariffService;
 
-    //    @GetMapping("getTariffs")
-//    public ResponseEntity<Map<String, Object>> getAllTariffs() {
-//        List<Tariff> tariffs = tariffService.getAllTariffs();
-//
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("data", Collections.singletonMap("tariffs", tariffs));
-//
-//        return ResponseEntity.ok(response);
-//    }
+    private final TariffMapper tariffMapper;
+
     @GetMapping("getTariffs")
     public ResponseEntity<Response> getAllTariffs() {
-        List<Tariff> tariffList = tariffService.getAllTariffs();
+        List<Tariff> tariffs = tariffService.getAllTariffs();
+        List<TariffResponse> tariffResponses = tariffs.stream()
+                .map(tariffMapper::toResponse)
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(
-                SuccessResponse.<TariffsResponse>builder().data(
-                                TariffsResponse.builder().tariffs(tariffList).build()
-                        )
-                        .build(), HttpStatus.OK
-        );
+        TariffsArrayResponse response = TariffsArrayResponse.builder()
+                .tariffs(tariffResponses)
+                .build();
+
+        return new ResponseEntity<>(SuccessResponse.builder().data(response).build(), HttpStatus.OK);
     }
 
 }

@@ -10,6 +10,7 @@ import ru.gozhan.loanservice.model.Order;
 import ru.gozhan.loanservice.repository.OrderRepository;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -22,8 +23,10 @@ public class OrderRepositoryImpl implements OrderRepository {
     private final String INSERT_QUERY = "INSERT INTO loan_order (order_id, user_id, tariff_id, credit_rating, status, " +
             "time_insert, time_update) VALUES (:orderId, :userId, :tariffId, :creditRating, :status, :timeInsert, :timeUpdate)";
 
-    private final String SELECT_ORDERS_BY_USERID_QUERY = "SELECT * FROM loan_order WHERE user_id = :userId " +
+    private final String SELECT_ORDERS_BY_USER_ID_AND_USERNAME_QUERY = "SELECT * FROM loan_order WHERE user_id = :userId " +
             "AND tariff_id = :tariffId";
+
+    private final String SELECT_CREATED_ORDER_QUERY = "SELECT * FROM loan_order WHERE order_id = :orderId";
 
     @Override
     public Order createOrder(Long userId, Long tariffId) {
@@ -47,22 +50,57 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .addValue("timeInsert", timeInsert)
                 .addValue("timeUpdate", timeInsert);
 
-        return namedParameterJdbcTemplate.queryForObject(
+        namedParameterJdbcTemplate.update(
                 INSERT_QUERY,
-                parameters,
-                new BeanPropertyRowMapper<>(Order.class));
+                parameters);
+
+        SqlParameterSource selectParameters = new MapSqlParameterSource()
+                .addValue("orderId", orderId);
+
+        return namedParameterJdbcTemplate.queryForObject(
+                SELECT_CREATED_ORDER_QUERY,
+                selectParameters,
+//                new BeanPropertyRowMapper<>(Order.class)
+                (rs, rowNum) -> {
+                    Order order = new Order();
+                    order.setId(rs.getLong("id"));
+                    order.setOrderId(UUID.fromString(rs.getString("order_id")));
+                    order.setUserId(rs.getLong("user_id"));
+                    order.setTariffId(rs.getLong("tariff_id"));
+                    order.setCreditRating(rs.getDouble("credit_rating"));
+                    order.setStatus(rs.getString("status"));
+                    order.setTimeInsert(rs.getTimestamp("time_insert"));
+                    order.setTimeUpdate(rs.getTimestamp("time_update"));
+                    return order;
+                }
+        );
     }
 
     @Override
     public Order getOrdersByUserIdAndTariffId(Long userId, Long tariffId) {
         SqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("userId", userId);
+                .addValue("userId", userId)
+                .addValue("tariffId", tariffId);
 
-        return namedParameterJdbcTemplate.queryForObject(
-                SELECT_ORDERS_BY_USERID_QUERY,
+        List<Order> orders = namedParameterJdbcTemplate.query(
+                SELECT_ORDERS_BY_USER_ID_AND_USERNAME_QUERY,
                 parameters,
-                new BeanPropertyRowMapper<>(Order.class)
+//                new BeanPropertyRowMapper<>(Order.class)
+                (rs, rowNum) -> {
+                    Order order = new Order();
+                    order.setId(rs.getLong("id"));
+                    order.setOrderId(UUID.fromString(rs.getString("order_id")));
+                    order.setUserId(rs.getLong("user_id"));
+                    order.setTariffId(rs.getLong("tariff_id"));
+                    order.setCreditRating(rs.getDouble("credit_rating"));
+                    order.setStatus(rs.getString("status"));
+                    order.setTimeInsert(rs.getTimestamp("time_insert"));
+                    order.setTimeUpdate(rs.getTimestamp("time_update"));
+                    return order;
+                }
         );
+
+        return orders.isEmpty() ? null : orders.get(0);
     }
 
 }

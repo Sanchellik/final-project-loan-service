@@ -12,8 +12,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TariffsResponse {
+public class TariffsArrayResponse {
 
-    private List<Tariff> tariffs;
+    private List<TariffResponse> tariffs;
 
 }

@@ -29,7 +29,10 @@ public class OrderServiceImpl implements OrderService {
 //    }
 
     @Override
-    public UUID tariffProcessing(Long userId, Long tariffId) throws TariffNotFoundException, LoanConsiderationException, LoanAlreadyApprovedException, TryLaterException {
+    public UUID orderProcessing(Long userId, Long tariffId) throws
+            TariffNotFoundException, LoanConsiderationException,
+            LoanAlreadyApprovedException, TryLaterException {
+
         if (!tariffRepository.existsById(tariffId)) {
             throw new TariffNotFoundException();
         }

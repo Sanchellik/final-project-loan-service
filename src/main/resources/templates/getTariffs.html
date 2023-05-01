@@ -31,7 +31,7 @@
         <tr th:each="tariff : ${tariffs}">
             <td><span th:text="${tariff.id}">Id</span></td>
             <td><span th:text="${tariff.type}">Type</span></td>
-            <td><span th:text="${tariff.interestRate}">Interest rate</span></td>
+            <td><span th:text="${tariff.interest_rate}">Interest rate</span></td>
             <td>
                 <a th:href="@{${'/loan-service/makeOrder/' + tariff.id}}" class="btn btn-success">Взять этот кредит</a>
             </td>
@@ -39,11 +39,11 @@
         </tbody>
     </table>
 
-    <div class="text-center">
-        <a href="http://localhost:8080/loan-service/getTariffs" class="btn btn-primary">
-            Посмотреть JSON
-        </a>
-    </div>
+<!--    <div class="text-center">-->
+<!--        <a href="http://localhost:8080/loan-service/getTariffs" class="btn btn-primary">-->
+<!--            Посмотреть JSON-->
+<!--        </a>-->
+<!--    </div>-->
 
     <br>
 

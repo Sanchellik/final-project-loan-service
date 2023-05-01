@@ -11,6 +11,6 @@ public interface OrderService {
 
 //    Long getUserId();
 
-    UUID tariffProcessing(Long userId, Long tariffId) throws TariffNotFoundException, LoanConsiderationException, LoanAlreadyApprovedException, TryLaterException;
+    UUID orderProcessing(Long userId, Long tariffId) throws TariffNotFoundException, LoanConsiderationException, LoanAlreadyApprovedException, TryLaterException;
 
 }

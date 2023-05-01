@@ -30,7 +30,7 @@ public class OrderRestController {
             LoanAlreadyApprovedException, TryLaterException {
 
         OrderResponse orderResponse = OrderResponse.builder()
-                .orderId(orderService.tariffProcessing(orderRequest.getUserId(), orderRequest.getTariffId()))
+                .orderId(orderService.orderProcessing(orderRequest.getUserId(), orderRequest.getTariffId()))
                 .build();
 
         SuccessResponse<OrderResponse> successResponse = SuccessResponse.<OrderResponse>builder()

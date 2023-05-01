@@ -34,7 +34,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/loan-service.html").permitAll()
+                        .requestMatchers("/", "/loan-service.html", "/loan-service/getTariffs").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin()

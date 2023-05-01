@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Order Result</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+
+        <div class="card-header">
+          <h3 class="text-center font-weight-bold">Order Result</h3>
+        </div>
+
+        <div class="card-body">
+
+          <div th:if="${error}">
+            <div class="alert alert-danger">
+              <h4 class="alert-heading">Error</h4>
+              <p th:text="${error.message}"></p>
+            </div>
+          </div>
+
+          <div th:if="${data}">
+            <div class="alert alert-success">
+              <h4 class="alert-heading">Order created</h4>
+              <p th:text="${data.orderId}"></p>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <a href="http://localhost:8080/loan-service/getTariffs-view" class="btn btn-primary">К тарифам</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

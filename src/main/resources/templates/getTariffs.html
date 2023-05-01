@@ -33,7 +33,9 @@
             <td><span th:text="${tariff.type}">Type</span></td>
             <td><span th:text="${tariff.interest_rate}">Interest rate</span></td>
             <td>
-                <a th:href="@{${'/loan-service/makeOrder/' + tariff.id}}" class="btn btn-success">Взять этот кредит</a>
+                <form method="post" th:action="@{/loan-service/makeOrder/{tariffId}(tariffId=${tariff.id})}">
+                    <button type="submit" class="btn btn-success">Взять этот кредит</button>
+                </form>
             </td>
         </tr>
         </tbody>
@@ -48,8 +50,8 @@
     <br>
 
     <div class="text-center">
-        <a href="http://localhost:8080/" class="btn btn-secondary">
-            На главную
+        <a href="http://localhost:8080/logout" class="btn btn-primary">
+            Выйти
         </a>
     </div>
 </div>

@@ -25,31 +25,33 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:if="${tariffs.empty}">
+        <tr th:if="${tariffs.isEmpty()}">
             <td colspan="4">No Tariffs Available</td>
         </tr>
         <tr th:each="tariff : ${tariffs}">
             <td><span th:text="${tariff.id}">Id</span></td>
             <td><span th:text="${tariff.type}">Type</span></td>
-            <td><span th:text="${tariff.interestRate}">Interest rate</span></td>
+            <td><span th:text="${tariff.interest_rate}">Interest rate</span></td>
             <td>
-                <a th:href="@{${'/loan-service/getLoan?id=' + tariff.id}}" class="btn btn-success">Взять этот кредит</a>
+                <form method="post" th:action="@{/loan-service/makeOrder/{tariffId}(tariffId=${tariff.id})}">
+                    <button type="submit" class="btn btn-success">Взять этот кредит</button>
+                </form>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <div class="text-center">
-        <a href="http://localhost:8080/loan-service/getTariffs" class="btn btn-primary">
-            Посмотреть JSON
-        </a>
-    </div>
+<!--    <div class="text-center">-->
+<!--        <a href="http://localhost:8080/loan-service/getTariffs" class="btn btn-primary">-->
+<!--            Посмотреть JSON-->
+<!--        </a>-->
+<!--    </div>-->
 
     <br>
 
     <div class="text-center">
-        <a href="http://localhost:8080/" class="btn btn-secondary">
-            На главную
+        <a href="http://localhost:8080/logout" class="btn btn-primary">
+            Выйти
         </a>
     </div>
 </div>

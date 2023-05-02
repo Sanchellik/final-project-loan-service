@@ -4,6 +4,8 @@ import ru.gozhan.loanservice.model.Order;
 
 public interface OrderRepository {
 
-    boolean createOrder(Order order);
+    Order createOrder(Long userId, Long tariffId);
+
+    Order getOrdersByUserIdAndTariffId(Long userId, Long tariffId);
 
 }

@@ -7,7 +7,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -23,8 +22,6 @@ public class SecurityConfig {
 
     private final DataSource dataSource;
 
-    private final UserDetailsService userDetailsService;
-
 //    private final AuthenticationConfiguration authenticationConfiguration;
 
 //    @Bean
@@ -37,7 +34,9 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/loan-service.html").permitAll()
+                        .requestMatchers("/", "/loan-service.html",
+                                "/loan-service/getTariffs", "/loan-service/getTariffs-view",
+                                "/loan-service/order").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin()
@@ -57,39 +56,39 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
-//
-//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-//
-////        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-//        jdbcUserDetailsManager.setUsersByUsernameQuery(
-//                "SELECT username, password, enabled FROM usr WHERE username = ?"
-//        );
-//        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-//                "SELECT username, 'ROLE_USER' FROM usr WHERE username = ?"
-//        );
-//        jdbcUserDetailsManager.setCreateUserSql(
-//                "INSERT INTO usr (username, password, enabled, account_non_expired, " +
-//                        "credentials_non_expired, account_non_locked) " +
-//                        "VALUES (?, ?, ?, ?, ?, ?)"
-//        );
-//        jdbcUserDetailsManager.setChangePasswordSql(
-//                "UPDATE usr SET password = ? WHERE username = ?"
-//        );
-//        jdbcUserDetailsManager.setDeleteUserSql(
-//                "DELETE FROM usr WHERE username = ?"
-//        );
-//
-//        return jdbcUserDetailsManager;
-//    }
+    @Bean
+    public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
+
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+//        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+                "SELECT username, password, enabled FROM usr WHERE username = ?"
+        );
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+                "SELECT username, 'ROLE_USER' FROM usr WHERE username = ?"
+        );
+        jdbcUserDetailsManager.setCreateUserSql(
+                "INSERT INTO usr (username, password, enabled, account_non_expired, " +
+                        "credentials_non_expired, account_non_locked) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        jdbcUserDetailsManager.setChangePasswordSql(
+                "UPDATE usr SET password = ? WHERE username = ?"
+        );
+        jdbcUserDetailsManager.setDeleteUserSql(
+                "DELETE FROM usr WHERE username = ?"
+        );
+
+        return jdbcUserDetailsManager;
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() throws Exception {
 
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
-        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setUserDetailsService(jdbcUserDetailsManager());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
 
         return authenticationProvider;

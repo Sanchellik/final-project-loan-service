@@ -18,15 +18,7 @@ import java.util.UUID;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    //    private final UserRepository userRepository;
     private final TariffRepository tariffRepository;
-
-//    @Override
-//    public Long getUserId() {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//
-//        return userRepository.getUserIdByUsername(username);
-//    }
 
     @Override
     public UUID orderProcessing(Long userId, Long tariffId) throws

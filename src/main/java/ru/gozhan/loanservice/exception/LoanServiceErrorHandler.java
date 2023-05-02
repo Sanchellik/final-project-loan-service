@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 public class LoanServiceErrorHandler {
 
     @ExceptionHandler({LoanConsiderationException.class, LoanAlreadyApprovedException.class,
-            OrderImpossibleToDeleteException.class, OrderNotFoundException.class, //TODO delete this from here
+            OrderImpossibleToDeleteException.class, OrderNotFoundException.class, //TODO maybe delete this from here
             TryLaterException.class, TariffNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleLoanExceptions(Exception ex) {
 
@@ -45,27 +45,6 @@ public class LoanServiceErrorHandler {
                 ).build();
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
-//    @ExceptionHandler(HttpClientErrorException.class)
-//    public String handleHttpClientErrorException(HttpClientErrorException.BadRequest exception, Model model) {
-//
-//        String responseBodyAsString = exception.getResponseBodyAsString();
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            Error error = objectMapper.readValue(responseBodyAsString, Error.class);
-//
-//            model.addAttribute("error", error);
-//
-//        } catch (IOException e) {
-//
-//            model.addAttribute("error", Error.builder()
-//                    .message(Code.UNKNOWN_ERROR.getMessage())
-//                    .code(Code.UNKNOWN_ERROR)
-//                    .build());
-//        }
-//        return "created-order";
-//    }
-
 
     @ExceptionHandler(HttpClientErrorException.class) //TODO try to create mapper fromJsonToResponse in util package
     public String handleHttpClientErrorException(HttpClientErrorException ex, Model model) {
@@ -93,31 +72,5 @@ public class LoanServiceErrorHandler {
 
         return "created-order";
     }
-
-
-    //TODO it works
-//    @ExceptionHandler(HttpClientErrorException.class)
-//    public String handleHttpClientErrorException(HttpClientErrorException.BadRequest exception, Model model) {
-//
-//        String responseBodyAsString = exception.getResponseBodyAsString();
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        JavaType type = objectMapper.getTypeFactory().constructParametricType(HashMap.class, String.class, Object.class);
-//        try {
-//            HashMap<String, Object> response = objectMapper.readValue(responseBodyAsString, type);
-//            Object errorObject = response.get("error");
-//            if (errorObject instanceof LinkedHashMap) {
-//                LinkedHashMap<String, Object> errorMap = (LinkedHashMap<String, Object>) errorObject;
-//                String message = (String) errorMap.get("message");
-//                String codeString = (String) errorMap.get("code");
-//                Code code = codeString != null ? Code.valueOf(codeString) : Code.UNKNOWN_ERROR;
-//                model.addAttribute("error", Error.builder().code(code).message(message).build());
-//            } else {
-//                model.addAttribute("error", Error.builder().code(Code.UNKNOWN_ERROR).message("Неизвестная ошибка").build());
-//            }
-//        } catch (IOException e) {
-//            model.addAttribute("error", Error.builder().code(Code.UNKNOWN_ERROR).message("Не удалось обработать ответ сервера").build());
-//        }
-//        return "created-order";
-//    }
 
 }

@@ -9,8 +9,6 @@ import java.util.UUID;
 
 public interface OrderService {
 
-//    Long getUserId();
-
     UUID orderProcessing(Long userId, Long tariffId) throws TariffNotFoundException, LoanConsiderationException, LoanAlreadyApprovedException, TryLaterException;
 
 }

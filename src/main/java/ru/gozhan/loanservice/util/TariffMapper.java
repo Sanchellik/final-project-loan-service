@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 import ru.gozhan.loanservice.model.Tariff;
-import ru.gozhan.loanservice.response.tariff.TariffResponse;
+import ru.gozhan.loanservice.response.success.tariff.TariffResponse;
 
 @Component
 @Mapper(componentModel = "spring")

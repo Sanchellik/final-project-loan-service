@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Code {
+public enum ErrorCode {
 
     LOAN_CONSIDERATION("Заявка находится на рассмотрении"),
     LOAN_ALREADY_APPROVED("Заявка уже одобрена"),
@@ -20,20 +20,5 @@ public enum Code {
     UNKNOWN_ERROR("Неизвестная ошибка");
 
     private final String message;
-
-    @JsonValue
-    public String getMessage() {
-        return message;
-    }
-
-    @JsonCreator
-    public static Code forValue(String value) {
-        for (Code code : values()) {
-            if (code.getMessage().equalsIgnoreCase(value)) {
-                return code;
-            }
-        }
-        return null;
-    }
 
 }

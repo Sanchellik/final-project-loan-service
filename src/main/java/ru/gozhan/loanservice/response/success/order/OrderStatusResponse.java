@@ -1,4 +1,4 @@
-package ru.gozhan.loanservice.response.tariff;
+package ru.gozhan.loanservice.response.success.order;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -11,12 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TariffResponse {
+public class OrderStatusResponse {
 
-    private Long id;
-
-    private String type;
-
-    private String interest_rate;
+    private String orderStatus;
 
 }

@@ -1,11 +1,12 @@
 package ru.gozhan.loanservice.exception.order;
 
-import ru.gozhan.loanservice.constant.Code;
+import ru.gozhan.loanservice.constant.ErrorCode;
+import ru.gozhan.loanservice.exception.base.BaseException;
 
-public class LoanConsiderationException extends RuntimeException {
+public class LoanConsiderationException extends BaseException {
 
     public LoanConsiderationException() {
-        super(Code.LOAN_CONSIDERATION.getMessage());
+        super(ErrorCode.LOAN_CONSIDERATION);
     }
 
 }

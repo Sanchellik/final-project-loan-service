@@ -1,4 +1,4 @@
-package ru.gozhan.loanservice.response;
+package ru.gozhan.loanservice.response.success.tariff;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -11,8 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SuccessResponse<T> implements Response {
+public class TariffResponse {
 
-    private T data;
+    private Long id;
+
+    private String type;
+
+    private String interest_rate;
 
 }

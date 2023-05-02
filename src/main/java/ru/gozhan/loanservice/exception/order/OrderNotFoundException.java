@@ -1,11 +1,12 @@
 package ru.gozhan.loanservice.exception.order;
 
-import ru.gozhan.loanservice.constant.Code;
+import ru.gozhan.loanservice.constant.ErrorCode;
+import ru.gozhan.loanservice.exception.base.BaseException;
 
-public class OrderNotFoundException extends RuntimeException {
+public class OrderNotFoundException extends BaseException {
 
     public OrderNotFoundException() {
-        super(Code.ORDER_NOT_FOUND.getMessage());
+        super(ErrorCode.ORDER_NOT_FOUND);
     }
 
 }

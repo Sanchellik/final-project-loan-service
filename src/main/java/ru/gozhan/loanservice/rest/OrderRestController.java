@@ -12,9 +12,9 @@ import ru.gozhan.loanservice.exception.order.LoanConsiderationException;
 import ru.gozhan.loanservice.exception.order.TryLaterException;
 import ru.gozhan.loanservice.exception.tariff.TariffNotFoundException;
 import ru.gozhan.loanservice.request.OrderRequest;
-import ru.gozhan.loanservice.response.Response;
-import ru.gozhan.loanservice.response.SuccessResponse;
-import ru.gozhan.loanservice.response.order.OrderResponse;
+import ru.gozhan.loanservice.response.base.Response;
+import ru.gozhan.loanservice.response.success.SuccessResponse;
+import ru.gozhan.loanservice.response.success.order.OrderResponse;
 import ru.gozhan.loanservice.service.OrderService;
 
 @RestController

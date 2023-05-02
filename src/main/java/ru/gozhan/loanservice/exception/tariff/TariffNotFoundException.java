@@ -1,11 +1,12 @@
 package ru.gozhan.loanservice.exception.tariff;
 
-import ru.gozhan.loanservice.constant.Code;
+import ru.gozhan.loanservice.constant.ErrorCode;
+import ru.gozhan.loanservice.exception.base.BaseException;
 
-public class TariffNotFoundException extends RuntimeException {
+public class TariffNotFoundException extends BaseException {
 
     public TariffNotFoundException() {
-        super(Code.TARIFF_NOT_FOUND.getMessage());
+        super(ErrorCode.TARIFF_NOT_FOUND);
     }
 
 }

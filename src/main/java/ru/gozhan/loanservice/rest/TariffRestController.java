@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gozhan.loanservice.model.Tariff;
-import ru.gozhan.loanservice.response.Response;
-import ru.gozhan.loanservice.response.SuccessResponse;
-import ru.gozhan.loanservice.response.tariff.TariffResponse;
-import ru.gozhan.loanservice.response.tariff.TariffsArrayResponse;
+import ru.gozhan.loanservice.response.base.Response;
+import ru.gozhan.loanservice.response.success.SuccessResponse;
+import ru.gozhan.loanservice.response.success.tariff.TariffResponse;
+import ru.gozhan.loanservice.response.success.tariff.TariffsArrayResponse;
 import ru.gozhan.loanservice.service.TariffService;
 import ru.gozhan.loanservice.util.TariffMapper;
 

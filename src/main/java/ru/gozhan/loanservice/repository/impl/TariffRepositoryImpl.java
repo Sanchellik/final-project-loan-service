@@ -17,17 +17,13 @@ public class TariffRepositoryImpl implements TariffRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-<<<<<<< HEAD
     private final String SELECT_ALL_QUERY = "SELECT * FROM tariff";
     private final String SELECT_EXISTS_ID_QUERY = "SELECT EXISTS(SELECT 1 FROM tariff WHERE id = :id)";
-=======
-    private final String DEF_FIND_TARIFFS_SQL = "SELECT * FROM tariff";
->>>>>>> master
 
     @Override
     public List<Tariff> getAllTariffs() {
         return namedParameterJdbcTemplate.query(
-                DEF_FIND_TARIFFS_SQL,
+                SELECT_ALL_QUERY,
                 new BeanPropertyRowMapper<>(Tariff.class));
     }
 

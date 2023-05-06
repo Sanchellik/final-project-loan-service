@@ -21,5 +21,14 @@ databaseChangeLog:
                   name: password
                   type: VARCHAR(255)
               - column:
-                  name: authorities
-                  type: text[]
+                  name: enabled
+                  type: BOOLEAN
+              - column:
+                  name: account_non_expired
+                  type: BOOLEAN
+              - column:
+                  name: credentials_non_expired
+                  type: BOOLEAN
+              - column:
+                  name: account_non_locked
+                  type: BOOLEAN

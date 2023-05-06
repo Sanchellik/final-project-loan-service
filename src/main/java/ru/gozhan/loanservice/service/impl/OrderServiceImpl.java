@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gozhan.loanservice.exception.order.LoanAlreadyApprovedException;
 import ru.gozhan.loanservice.exception.order.LoanConsiderationException;
+import ru.gozhan.loanservice.exception.order.OrderNotFoundException;
 import ru.gozhan.loanservice.exception.order.TryLaterException;
 import ru.gozhan.loanservice.exception.tariff.TariffNotFoundException;
 import ru.gozhan.loanservice.model.Order;
@@ -21,9 +22,7 @@ public class OrderServiceImpl implements OrderService {
     private final TariffRepository tariffRepository;
 
     @Override
-    public UUID orderProcessing(Long userId, Long tariffId) throws
-            TariffNotFoundException, LoanConsiderationException,
-            LoanAlreadyApprovedException, TryLaterException {
+    public UUID orderProcessing(Long userId, Long tariffId) {
 
         if (!tariffRepository.existsById(tariffId)) {
             throw new TariffNotFoundException();
@@ -46,6 +45,18 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.createOrder(userId, tariffId);
 
         return savedOrder.getOrderId();
+    }
+
+    @Override
+    public String getOrderStatus(UUID orderId) {
+
+        String status = orderRepository.getStatusByOrderId(orderId);
+
+        if (status == null) {
+            throw new OrderNotFoundException();
+        }
+
+        return status;
     }
 
 }

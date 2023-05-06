@@ -11,8 +11,17 @@ databaseChangeLog:
                   value: user
               - column:
                   name: password
-                  value: "$2a$12$ijUzIKj4CQ5JNSmgeSeS1uDwomQaLMETJ5SzX4MUr/6qOnVcNmBDK" # Encrypted password for "123"
-#                  value: ${liquibase:passwordEncrypt}"123" # Encrypted password for "password"
+                  value: "$2a$12$ijUzIKj4CQ5JNSmgeSeS1uDwomQaLMETJ5SzX4MUr/6qOnVcNmBDK" # this is "123"
               - column:
-                  name: authorities
-                  value: '{ROLE_USER}'
+                  name: enabled
+                  value: true
+              - column:
+                  name: account_non_expired
+                  value: true
+              - column:
+                  name: credentials_non_expired
+                  value: true
+              - column:
+                  name: account_non_locked
+                  value: true
+

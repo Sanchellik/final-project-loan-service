@@ -28,6 +28,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private final String SELECT_CREATED_ORDER_QUERY = "SELECT * FROM loan_order WHERE order_id = :orderId";
 
+    private final String SELECT_STATUS_BY_ORDER_ID_QUERY = "SELECT status FROM loan_order WHERE order_id = :orderId";
+
     @Override
     public Order createOrder(Long userId, Long tariffId) {
 
@@ -78,6 +80,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Order getOrdersByUserIdAndTariffId(Long userId, Long tariffId) {
+
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("tariffId", tariffId);
@@ -101,6 +104,21 @@ public class OrderRepositoryImpl implements OrderRepository {
         );
 
         return orders.isEmpty() ? null : orders.get(0);
+    }
+
+    @Override
+    public String getStatusByOrderId(UUID orderId) {
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("orderId", orderId.toString());
+
+        List<String> results = namedParameterJdbcTemplate.query(
+                SELECT_STATUS_BY_ORDER_ID_QUERY,
+                parameters,
+                (rs, rowNum) -> rs.getString("status")
+        );
+
+        return results.isEmpty() ? null : results.get(0);
     }
 
 }

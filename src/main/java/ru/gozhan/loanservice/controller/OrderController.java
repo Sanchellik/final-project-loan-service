@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
-import ru.gozhan.loanservice.request.OrderRequest;
+import ru.gozhan.loanservice.request.CreateOrderRequest;
 import ru.gozhan.loanservice.response.success.SuccessResponse;
 import ru.gozhan.loanservice.response.success.order.OrderResponse;
 import ru.gozhan.loanservice.service.UserService;
@@ -32,10 +32,10 @@ public class OrderController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userService.getUserIdByUsername(username);
 
-        OrderRequest orderRequest = new OrderRequest(userId, Long.parseLong(tariffId));
+        CreateOrderRequest createOrderRequest = new CreateOrderRequest(userId, Long.parseLong(tariffId));
         String url = "http://localhost:8080/loan-service/order";
 
-        HttpEntity<OrderRequest> requestEntity = new HttpEntity<>(orderRequest);
+        HttpEntity<CreateOrderRequest> requestEntity = new HttpEntity<>(createOrderRequest);
         ResponseEntity<SuccessResponse<OrderResponse>> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
@@ -53,10 +53,10 @@ public class OrderController {
 //        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 //        Long userId = userService.getUserIdByUsername(username);
 //
-//        OrderRequest orderRequest = new OrderRequest(userId, Long.parseLong(tariffId));
+//        CreateOrderRequest createOrderRequest = new CreateOrderRequest(userId, Long.parseLong(tariffId));
 //        String url = "http://localhost:8080/loan-service/order";
 //
-//        HttpEntity<OrderRequest> requestEntity = new HttpEntity<>(orderRequest);
+//        HttpEntity<CreateOrderRequest> requestEntity = new HttpEntity<>(createOrderRequest);
 //        ResponseEntity<Response> responseEntity = restTemplate.exchange(
 //                url,
 //                HttpMethod.POST,

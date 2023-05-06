@@ -2,10 +2,7 @@ package ru.gozhan.loanservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gozhan.loanservice.exception.order.LoanAlreadyApprovedException;
-import ru.gozhan.loanservice.exception.order.LoanConsiderationException;
-import ru.gozhan.loanservice.exception.order.OrderNotFoundException;
-import ru.gozhan.loanservice.exception.order.TryLaterException;
+import ru.gozhan.loanservice.exception.order.*;
 import ru.gozhan.loanservice.exception.tariff.TariffNotFoundException;
 import ru.gozhan.loanservice.model.Order;
 import ru.gozhan.loanservice.repository.OrderRepository;
@@ -58,5 +55,23 @@ public class OrderServiceImpl implements OrderService {
 
         return status;
     }
+
+    @Override
+    public boolean deleteOrder(Long userId, UUID orderId) {
+
+        if (!orderRepository.existsByUserIdAndOrderId(userId, orderId)) {
+            throw new OrderNotFoundException();
+        }
+
+        String status = orderRepository.getStatusByOrderId(orderId);
+
+        if (!"IN_PROGRESS".equals(status)) {
+            throw new OrderImpossibleToDeleteException();
+        }
+
+        orderRepository.deleteOrderByUserIdAndOrderId(userId, orderId);
+        return true;
+    }
+
 
 }

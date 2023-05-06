@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderRequest {
+public class CreateOrderRequest {
 
     private Long userId;
-
     private Long tariffId;
 
 }

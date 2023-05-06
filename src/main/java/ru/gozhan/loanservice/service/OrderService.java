@@ -8,4 +8,6 @@ public interface OrderService {
 
     String getOrderStatus(UUID orderId);
 
+    boolean deleteOrder(Long userId, UUID orderId);
+
 }

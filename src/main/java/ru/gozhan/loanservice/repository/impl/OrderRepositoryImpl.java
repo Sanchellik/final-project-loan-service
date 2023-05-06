@@ -1,7 +1,6 @@
 package ru.gozhan.loanservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -20,15 +19,22 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final String INSERT_QUERY = "INSERT INTO loan_order (order_id, user_id, tariff_id, credit_rating, status, " +
-            "time_insert, time_update) VALUES (:orderId, :userId, :tariffId, :creditRating, :status, :timeInsert, :timeUpdate)";
+    private final String INSERT_QUERY = "INSERT INTO loan_order " +
+            "(order_id, user_id, tariff_id, credit_rating, status, time_insert, time_update) " +
+            "VALUES (:orderId, :userId, :tariffId, :creditRating, :status, :timeInsert, :timeUpdate)";
 
-    private final String SELECT_ORDERS_BY_USER_ID_AND_USERNAME_QUERY = "SELECT * FROM loan_order WHERE user_id = :userId " +
-            "AND tariff_id = :tariffId";
+    private final String SELECT_ORDERS_BY_USER_ID_AND_TARIFF_ID_QUERY = "SELECT * FROM loan_order WHERE " +
+            "user_id = :userId AND tariff_id = :tariffId";
 
     private final String SELECT_CREATED_ORDER_QUERY = "SELECT * FROM loan_order WHERE order_id = :orderId";
 
     private final String SELECT_STATUS_BY_ORDER_ID_QUERY = "SELECT status FROM loan_order WHERE order_id = :orderId";
+
+    private final String DELETE_ORDER_BY_USER_ID_AND_ORDER_ID_QUERY = "DELETE FROM loan_order WHERE " +
+            "user_id = :userId AND order_id = :orderId";
+
+    private final String EXISTS_BY_USER_ID_AND_ORDER_ID_QUERY = "SELECT EXISTS(SELECT 1 FROM loan_order WHERE " +
+            "user_id = :userId AND order_id = :orderId)";
 
     @Override
     public Order createOrder(Long userId, Long tariffId) {
@@ -86,7 +92,7 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .addValue("tariffId", tariffId);
 
         List<Order> orders = namedParameterJdbcTemplate.query(
-                SELECT_ORDERS_BY_USER_ID_AND_USERNAME_QUERY,
+                SELECT_ORDERS_BY_USER_ID_AND_TARIFF_ID_QUERY,
                 parameters,
 //                new BeanPropertyRowMapper<>(Order.class)
                 (rs, rowNum) -> {
@@ -119,6 +125,33 @@ public class OrderRepositoryImpl implements OrderRepository {
         );
 
         return results.isEmpty() ? null : results.get(0);
+    }
+
+    @Override
+    public boolean deleteOrderByUserIdAndOrderId(Long userId, UUID orderId) {
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("orderId", orderId.toString());
+
+        int affectedRows = namedParameterJdbcTemplate.update(
+                DELETE_ORDER_BY_USER_ID_AND_ORDER_ID_QUERY,
+                parameters
+        );
+
+        return affectedRows > 0;
+    }
+
+    @Override
+    public boolean existsByUserIdAndOrderId(Long userId, UUID orderId) {
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("orderId", orderId.toString());
+
+        return namedParameterJdbcTemplate.queryForObject(
+                EXISTS_BY_USER_ID_AND_ORDER_ID_QUERY,
+                parameters,
+                Boolean.class
+        );
     }
 
 }

@@ -12,4 +12,8 @@ public interface OrderRepository {
 
     String getStatusByOrderId(UUID orderId);
 
+    boolean deleteOrderByUserIdAndOrderId(Long userId, UUID orderId);
+
+    boolean existsByUserIdAndOrderId(Long userId, UUID orderId);
+
 }

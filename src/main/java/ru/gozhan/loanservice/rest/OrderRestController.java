@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.gozhan.loanservice.request.OrderRequest;
+import ru.gozhan.loanservice.request.CreateOrderRequest;
+import ru.gozhan.loanservice.request.DeleteOrderRequest;
 import ru.gozhan.loanservice.response.base.Response;
 import ru.gozhan.loanservice.response.success.SuccessResponse;
 import ru.gozhan.loanservice.response.success.order.OrderResponse;
@@ -21,10 +22,10 @@ public class OrderRestController {
     private final OrderService orderService;
 
     @PostMapping("/order")
-    public ResponseEntity<Response> makeOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<Response> makeOrder(@RequestBody CreateOrderRequest createOrderRequest) {
 
         OrderResponse orderResponse = OrderResponse.builder()
-                .orderId(orderService.orderProcessing(orderRequest.getUserId(), orderRequest.getTariffId()))
+                .orderId(orderService.orderProcessing(createOrderRequest.getUserId(), createOrderRequest.getTariffId()))
                 .build();
 
         SuccessResponse<OrderResponse> successResponse = SuccessResponse.<OrderResponse>builder()
@@ -49,5 +50,11 @@ public class OrderRestController {
     }
 
     @DeleteMapping("/deleteOrder")
+    public ResponseEntity<Response> deleteOrder(@RequestBody DeleteOrderRequest deleteOrderRequest) {
+
+        orderService.deleteOrder(deleteOrderRequest.getUserId(), deleteOrderRequest.getOrderId());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

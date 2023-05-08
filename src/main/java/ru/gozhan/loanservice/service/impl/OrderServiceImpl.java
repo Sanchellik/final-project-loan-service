@@ -23,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
-    public UUID orderProcessing(Long userId, Long tariffId) {
+    public UUID createOrder(Long userId, Long tariffId) {
 
         if (!tariffRepository.existsById(tariffId)) {
             throw new TariffNotFoundException();
@@ -80,7 +80,16 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> getUserOrders(Long userId) {
 
         List<Order> orders = orderRepository.getOrdersByUserId(userId);
-        return orderMapper.toDtoList(orders);
+
+        List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
+
+        for (int i = 0; i < orderDtos.size(); i++) {
+
+            String tariffType = tariffRepository.getTypeById(orders.get(i).getTariffId());
+            orderDtos.get(i).setTariffType(tariffType);
+        }
+
+        return orderDtos;
     }
 
 }

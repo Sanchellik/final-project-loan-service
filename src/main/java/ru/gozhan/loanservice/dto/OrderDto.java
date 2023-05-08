@@ -14,6 +14,7 @@ public class OrderDto {
 
     private UUID orderId;
     private String status;
+    private String tariffType;
 
     private Timestamp timeInsert;
     private Timestamp timeUpdate;

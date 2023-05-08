@@ -24,8 +24,6 @@ public class SecurityConfig {
 
     private final DataSource dataSource;
 
-//    private final AuthenticationConfiguration authenticationConfiguration;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -33,11 +31,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/loan-service.html",
                                 "/loan-service/getTariffs", "/loan-service/getTariffs-view",
-                                "/loan-service/order").permitAll()
+                                "/loan-service/order", "/loan-service/deleteOrder").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin()
-                    .defaultSuccessUrl("/loan-service/getTariffs-view")
+                    .defaultSuccessUrl("/")
                     .permitAll()
                 .and()
                 .logout()

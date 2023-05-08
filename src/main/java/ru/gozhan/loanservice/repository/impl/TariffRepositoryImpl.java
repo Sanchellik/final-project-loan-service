@@ -19,6 +19,7 @@ public class TariffRepositoryImpl implements TariffRepository {
 
     private final String SELECT_ALL_QUERY = "SELECT * FROM tariff";
     private final String SELECT_EXISTS_ID_QUERY = "SELECT EXISTS(SELECT 1 FROM tariff WHERE id = :id)";
+    private final String SELECT_TYPE_BY_ID_QUERY = "SELECT type FROM tariff WHERE id = :id";
 
     @Override
     public List<Tariff> getAllTariffs() {
@@ -36,6 +37,18 @@ public class TariffRepositoryImpl implements TariffRepository {
                 SELECT_EXISTS_ID_QUERY,
                 parameters,
                 Boolean.class
+        );
+    }
+
+    @Override
+    public String getTypeById(Long id) {
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        return namedParameterJdbcTemplate.queryForObject(
+                SELECT_TYPE_BY_ID_QUERY,
+                parameters,
+                String.class
         );
     }
 

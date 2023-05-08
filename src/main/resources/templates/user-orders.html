@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>User Orders</title>
+  <title>Заказы клиента</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -15,17 +15,17 @@
     <thead>
     <tr>
       <th>#</th>
-      <th>Order ID</th>
-      <th>Status</th>
-      <th>Time Insert</th>
-      <th>Time Update</th>
-      <th>Action</th>
+      <th>Название</th>
+      <th>Статус</th>
+      <th>Время создания</th>
+      <th>Время последнего обновления</th>
+      <th>Действие</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="order, orderStat : ${orders}">
       <td th:text="${orderStat.count}"></td>
-      <td th:text="${order.orderId}"></td>
+      <td th:text="${order.tariffType}"></td>
       <td th:text="${order.status}"></td>
       <td th:text="${order.timeInsert}"></td>
       <td th:text="${order.timeUpdate}"></td>
@@ -41,13 +41,13 @@
 
   <div class="text-center mt-4" th:if="${orders.isEmpty()}">
     <div class="alert alert-warning" role="alert">
-      <h4 class="alert-heading">У вас пока нет кредитов</h4>
+      <h4 class="alert-heading">У тебя пока нет кредитов</h4>
     </div>
   </div>
 
   <div class="text-center">
-    <a href="http://localhost:8080/logout" class="btn btn-primary">
-      Выйти
+    <a href="http://localhost:8080/" class="btn btn-primary">
+      Назад
     </a>
   </div>
 

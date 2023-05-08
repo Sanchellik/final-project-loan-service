@@ -8,4 +8,6 @@ public interface TariffService {
 
     List<Tariff> getAllTariffs();
 
+    String getTypeById(Long id);
+
 }

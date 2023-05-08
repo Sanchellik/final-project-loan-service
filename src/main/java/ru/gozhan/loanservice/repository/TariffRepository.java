@@ -10,4 +10,6 @@ public interface TariffRepository {
 
     boolean existsById(Long id);
 
+    String getTypeById(Long id);
+
 }

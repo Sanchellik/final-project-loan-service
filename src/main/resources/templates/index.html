@@ -9,16 +9,24 @@
 <body>
 
 <div class="container">
-    <h1 class="text-center mt-5">Вы на главной странице сервиса по оформлению кредита</h1>
+    <h1 class="text-center mt-5">Gozhan Credit Bank</h1>
     <div class="text-center mt-4">
         <a href="http://localhost:8080/loan-service/getTariffs-view" class="btn btn-primary">
-            Все тарифы
+            Тарифы
         </a>
     </div>
     <div class="text-center mt-4">
         <a href="http://localhost:8080/loan-service/user/orders" class="btn btn-secondary">
             Личный кабинет
         </a>
+    </div>
+    <div class="text-center mt-4">
+        <div th:if="${principal == null}">
+            <a href="/login" class="btn btn-primary">Войти</a>
+        </div>
+        <div th:if="${principal != null}">
+            <a href="/logout" class="btn btn-secondary">Выйти</a>
+        </div>
     </div>
 </div>
 

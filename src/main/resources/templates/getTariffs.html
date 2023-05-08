@@ -34,7 +34,7 @@
             <td><span th:text="${tariff.interest_rate}">Interest rate</span></td>
             <td>
                 <form method="post" th:action="@{/loan-service/makeOrder/{tariffId}(tariffId=${tariff.id})}">
-                    <button type="submit" class="btn btn-success">Взять этот кредит</button>
+                    <button type="submit" class="btn btn-success">Взять</button>
                 </form>
             </td>
         </tr>
@@ -44,8 +44,8 @@
     <br>
 
     <div class="text-center">
-        <a href="http://localhost:8080/logout" class="btn btn-primary">
-            Выйти
+        <a href="http://localhost:8080/" class="btn btn-primary">
+            Назад
         </a>
     </div>
 </div>

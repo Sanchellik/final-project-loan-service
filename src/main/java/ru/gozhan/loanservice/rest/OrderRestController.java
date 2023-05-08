@@ -1,6 +1,7 @@
 package ru.gozhan.loanservice.rest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,15 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/loan-service")
 @RequiredArgsConstructor
+@Slf4j
 public class OrderRestController {
 
     private final OrderService orderService;
 
     @PostMapping("/order")
     public ResponseEntity<Response> makeOrder(@RequestBody CreateOrderRequest createOrderRequest) {
+
+        log.info("/order START");
 
         OrderResponse orderResponse = OrderResponse.builder()
                 .orderId(orderService.orderProcessing(createOrderRequest.getUserId(), createOrderRequest.getTariffId()))
@@ -32,6 +36,7 @@ public class OrderRestController {
                 .data(orderResponse)
                 .build();
 
+        log.info("/order FINISH");
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 
@@ -49,11 +54,13 @@ public class OrderRestController {
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteOrder")
+    @DeleteMapping("deleteOrder")
     public ResponseEntity<Response> deleteOrder(@RequestBody DeleteOrderRequest deleteOrderRequest) {
 
+        log.info("/deleteOrder START");
         orderService.deleteOrder(deleteOrderRequest.getUserId(), deleteOrderRequest.getOrderId());
 
+        log.info("/deleteOrder FINISH");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

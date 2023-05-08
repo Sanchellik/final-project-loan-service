@@ -2,13 +2,16 @@ package ru.gozhan.loanservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.gozhan.loanservice.dto.OrderDto;
 import ru.gozhan.loanservice.exception.order.*;
 import ru.gozhan.loanservice.exception.tariff.TariffNotFoundException;
 import ru.gozhan.loanservice.model.Order;
 import ru.gozhan.loanservice.repository.OrderRepository;
 import ru.gozhan.loanservice.repository.TariffRepository;
 import ru.gozhan.loanservice.service.OrderService;
+import ru.gozhan.loanservice.util.OrderMapper;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,6 +20,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final TariffRepository tariffRepository;
+    private final OrderMapper orderMapper;
 
     @Override
     public UUID orderProcessing(Long userId, Long tariffId) {
@@ -57,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean deleteOrder(Long userId, UUID orderId) {
+    public void deleteOrder(Long userId, UUID orderId) {
 
         if (!orderRepository.existsByUserIdAndOrderId(userId, orderId)) {
             throw new OrderNotFoundException();
@@ -70,8 +74,13 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderRepository.deleteOrderByUserIdAndOrderId(userId, orderId);
-        return true;
     }
 
+    @Override
+    public List<OrderDto> getUserOrders(Long userId) {
+
+        List<Order> orders = orderRepository.getOrdersByUserId(userId);
+        return orderMapper.toDtoList(orders);
+    }
 
 }

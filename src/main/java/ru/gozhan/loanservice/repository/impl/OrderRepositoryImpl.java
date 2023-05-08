@@ -1,6 +1,8 @@
 package ru.gozhan.loanservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import ru.gozhan.loanservice.model.Order;
 import ru.gozhan.loanservice.repository.OrderRepository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Random;
@@ -35,6 +39,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private final String EXISTS_BY_USER_ID_AND_ORDER_ID_QUERY = "SELECT EXISTS(SELECT 1 FROM loan_order WHERE " +
             "user_id = :userId AND order_id = :orderId)";
+
+    private final String SELECT_BY_USER_ID = "SELECT * FROM loan_order WHERE user_id = :userId";
 
     @Override
     public Order createOrder(Long userId, Long tariffId) {
@@ -69,18 +75,7 @@ public class OrderRepositoryImpl implements OrderRepository {
                 SELECT_CREATED_ORDER_QUERY,
                 selectParameters,
 //                new BeanPropertyRowMapper<>(Order.class)
-                (rs, rowNum) -> {
-                    Order order = new Order();
-                    order.setId(rs.getLong("id"));
-                    order.setOrderId(UUID.fromString(rs.getString("order_id")));
-                    order.setUserId(rs.getLong("user_id"));
-                    order.setTariffId(rs.getLong("tariff_id"));
-                    order.setCreditRating(rs.getDouble("credit_rating"));
-                    order.setStatus(rs.getString("status"));
-                    order.setTimeInsert(rs.getTimestamp("time_insert"));
-                    order.setTimeUpdate(rs.getTimestamp("time_update"));
-                    return order;
-                }
+                new OrderRowMapper()
         );
     }
 
@@ -95,18 +90,7 @@ public class OrderRepositoryImpl implements OrderRepository {
                 SELECT_ORDERS_BY_USER_ID_AND_TARIFF_ID_QUERY,
                 parameters,
 //                new BeanPropertyRowMapper<>(Order.class)
-                (rs, rowNum) -> {
-                    Order order = new Order();
-                    order.setId(rs.getLong("id"));
-                    order.setOrderId(UUID.fromString(rs.getString("order_id")));
-                    order.setUserId(rs.getLong("user_id"));
-                    order.setTariffId(rs.getLong("tariff_id"));
-                    order.setCreditRating(rs.getDouble("credit_rating"));
-                    order.setStatus(rs.getString("status"));
-                    order.setTimeInsert(rs.getTimestamp("time_insert"));
-                    order.setTimeUpdate(rs.getTimestamp("time_update"));
-                    return order;
-                }
+                new OrderRowMapper()
         );
 
         return orders.isEmpty() ? null : orders.get(0);
@@ -152,6 +136,36 @@ public class OrderRepositoryImpl implements OrderRepository {
                 parameters,
                 Boolean.class
         );
+    }
+
+    @Override
+    public List<Order> getOrdersByUserId(Long userId) {
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("userId", userId);
+
+        return namedParameterJdbcTemplate.query(
+                SELECT_BY_USER_ID,
+                parameters,
+                new OrderRowMapper()
+        );
+    }
+
+    class OrderRowMapper implements RowMapper<Order> {
+
+        @Override
+        public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Order order = new Order();
+            order.setId(rs.getLong("id"));
+            order.setOrderId(UUID.fromString(rs.getString("order_id")));
+            order.setUserId(rs.getLong("user_id"));
+            order.setTariffId(rs.getLong("tariff_id"));
+            order.setCreditRating(rs.getDouble("credit_rating"));
+            order.setStatus(rs.getString("status"));
+            order.setTimeInsert(rs.getTimestamp("time_insert"));
+            order.setTimeUpdate(rs.getTimestamp("time_update"));
+            return order;
+        }
     }
 
 }

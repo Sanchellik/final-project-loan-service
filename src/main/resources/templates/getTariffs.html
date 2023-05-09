@@ -9,37 +9,41 @@
 <body>
 <div class="container">
     <h1 class="text-center mt-5">Мы можем предложить следующие тарифы</h1>
-    <table class="table table-striped table-fixed mt-4">
-        <colgroup>
-            <col style="width: 20%">
-            <col style="width: 30%">
-            <col style="width: 30%">
-            <col style="width: 20%">
-        </colgroup>
-        <thead>
-        <tr>
-            <th>№</th>
-            <th>Тип</th>
-            <th>Процентная ставка</th>
-            <th>Действие</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${tariffs.isEmpty()}">
-            <td colspan="4">No Tariffs Available</td>
-        </tr>
-        <tr th:each="tariff : ${tariffs}">
-            <td><span th:text="${tariff.id}">Id</span></td>
-            <td><span th:text="${tariff.type}">Type</span></td>
-            <td><span th:text="${tariff.interest_rate}">Interest rate</span></td>
-            <td>
-                <form method="post" th:action="@{/loan-service/makeOrder/{tariffId}(tariffId=${tariff.id})}">
-                    <button type="submit" class="btn btn-success">Взять</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
+    <div th:if="${not tariffs.isEmpty()}">
+        <table class="table table-striped table-fixed mt-4">
+            <colgroup>
+                <col style="width: 20%">
+                <col style="width: 30%">
+                <col style="width: 30%">
+                <col style="width: 20%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Тип</th>
+                <th>Процентная ставка</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tariff : ${tariffs}">
+                <td><span th:text="${tariff.id}">Id</span></td>
+                <td><span th:text="${tariff.type}">Type</span></td>
+                <td><span th:text="${tariff.interest_rate}">Interest rate</span></td>
+                <td>
+                    <form method="post" th:action="@{/loan-service/makeOrder/{tariffId}(tariffId=${tariff.id})}">
+                        <button type="submit" class="btn btn-success">Взять</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${tariffs.isEmpty()}" class="text-center">
+        <h3>No Tariffs Available</h3>
+    </div>
 
     <br>
 

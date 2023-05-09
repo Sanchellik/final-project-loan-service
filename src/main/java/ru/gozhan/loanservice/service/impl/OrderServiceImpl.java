@@ -85,7 +85,11 @@ public class OrderServiceImpl implements OrderService {
 
         for (int i = 0; i < orderDtos.size(); i++) {
 
-            String tariffType = tariffRepository.getTypeById(orders.get(i).getTariffId());
+            Long tariffId = orders.get(i).getTariffId();
+
+            String tariffType = tariffRepository.getTypeById(tariffId)
+                    .orElseThrow(() -> new IllegalArgumentException("Tariff type not found for id: " + tariffId));
+
             orderDtos.get(i).setTariffType(tariffType);
         }
 

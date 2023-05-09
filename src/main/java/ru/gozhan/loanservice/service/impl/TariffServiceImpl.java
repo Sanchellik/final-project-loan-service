@@ -21,7 +21,8 @@ public class TariffServiceImpl implements TariffService {
 
     @Override
     public String getTypeById(Long id) {
-        return tariffRepository.getTypeById(id);
+        return tariffRepository.getTypeById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Tariff type not found for id: " + id));
     }
 
 }

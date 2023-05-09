@@ -92,4 +92,14 @@ public class OrderServiceImpl implements OrderService {
         return orderDtos;
     }
 
+    @Override
+    public List<Order> getOrdersByStatus(String status) {
+        return orderRepository.getOrdersByStatus(status);
+    }
+
+    @Override
+    public void updateStatusAndTime(Order order) {
+        orderRepository.updateStatusAndTime(order);
+    }
+
 }

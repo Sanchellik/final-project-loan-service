@@ -19,4 +19,8 @@ public interface OrderRepository {
 
     List<Order> getOrdersByUserId(Long userId);
 
+    List<Order> getOrdersByStatus(String status);
+
+    void updateStatusAndTime(Order order);
+
 }

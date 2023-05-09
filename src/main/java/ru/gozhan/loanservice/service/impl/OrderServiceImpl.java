@@ -12,6 +12,7 @@ import ru.gozhan.loanservice.service.OrderService;
 import ru.gozhan.loanservice.util.OrderMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,8 +30,10 @@ public class OrderServiceImpl implements OrderService {
             throw new TariffNotFoundException();
         }
 
-        Order order = orderRepository.getOrdersByUserIdAndTariffId(userId, tariffId);
-        if (order != null) {
+        Optional<Order> orderOptional = orderRepository.getOrderByUserIdAndTariffId(userId, tariffId);
+
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
             switch (order.getStatus()) {
                 case "IN_PROGRESS" -> {
                     throw new LoanConsiderationException();
@@ -51,13 +54,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String getOrderStatus(UUID orderId) {
 
-        String status = orderRepository.getStatusByOrderId(orderId);
-
-        if (status == null) {
-            throw new OrderNotFoundException();
-        }
-
-        return status;
+        return orderRepository.getStatusByOrderId(orderId)
+                .orElseThrow(OrderNotFoundException::new);
     }
 
     @Override
@@ -67,7 +65,8 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderNotFoundException();
         }
 
-        String status = orderRepository.getStatusByOrderId(orderId);
+        String status = orderRepository.getStatusByOrderId(orderId)
+                .orElseThrow(OrderNotFoundException::new);
 
         if (!"IN_PROGRESS".equals(status)) {
             throw new OrderImpossibleToDeleteException();

@@ -1,7 +1,6 @@
 package ru.gozhan.loanservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -14,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -66,7 +66,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Order getOrdersByUserIdAndTariffId(Long userId, Long tariffId) {
+    public Optional<Order> getOrderByUserIdAndTariffId(Long userId, Long tariffId) {
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("userId", userId)
@@ -81,11 +81,11 @@ public class OrderRepositoryImpl implements OrderRepository {
                 new OrderRowMapper()
         );
 
-        return orders.isEmpty() ? null : orders.get(0);
+        return orders.isEmpty() ? Optional.empty() : Optional.of(orders.get(0));
     }
 
     @Override
-    public String getStatusByOrderId(UUID orderId) {
+    public Optional<String> getStatusByOrderId(UUID orderId) {
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("orderId", orderId.toString());
@@ -98,11 +98,11 @@ public class OrderRepositoryImpl implements OrderRepository {
                 (rs, rowNum) -> rs.getString("status")
         );
 
-        return results.isEmpty() ? null : results.get(0);
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
     @Override
-    public boolean deleteOrderByUserIdAndOrderId(Long userId, UUID orderId) {
+    public void deleteOrderByUserIdAndOrderId(Long userId, UUID orderId) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("orderId", orderId.toString());
@@ -115,7 +115,6 @@ public class OrderRepositoryImpl implements OrderRepository {
                 parameters
         );
 
-        return affectedRows > 0;
     }
 
     @Override
@@ -127,11 +126,11 @@ public class OrderRepositoryImpl implements OrderRepository {
         String EXISTS_BY_USER_ID_AND_ORDER_ID_QUERY = "SELECT EXISTS(SELECT 1 FROM loan_order WHERE " +
                 "user_id = :userId AND order_id = :orderId)";
 
-        return namedParameterJdbcTemplate.queryForObject(
+        return Boolean.TRUE.equals(namedParameterJdbcTemplate.queryForObject(
                 EXISTS_BY_USER_ID_AND_ORDER_ID_QUERY,
                 parameters,
                 Boolean.class
-        );
+        ));
     }
 
     @Override

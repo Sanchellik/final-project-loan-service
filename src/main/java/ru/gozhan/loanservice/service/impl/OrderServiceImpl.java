@@ -12,6 +12,7 @@ import ru.gozhan.loanservice.service.OrderService;
 import ru.gozhan.loanservice.util.OrderMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,14 +24,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
-    public UUID orderProcessing(Long userId, Long tariffId) {
+    public UUID createOrder(Long userId, Long tariffId) {
 
         if (!tariffRepository.existsById(tariffId)) {
             throw new TariffNotFoundException();
         }
 
-        Order order = orderRepository.getOrdersByUserIdAndTariffId(userId, tariffId);
-        if (order != null) {
+        Optional<Order> orderOptional = orderRepository.getOrderByUserIdAndTariffId(userId, tariffId);
+
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
             switch (order.getStatus()) {
                 case "IN_PROGRESS" -> {
                     throw new LoanConsiderationException();
@@ -51,13 +54,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String getOrderStatus(UUID orderId) {
 
-        String status = orderRepository.getStatusByOrderId(orderId);
-
-        if (status == null) {
-            throw new OrderNotFoundException();
-        }
-
-        return status;
+        return orderRepository.getStatusByOrderId(orderId)
+                .orElseThrow(OrderNotFoundException::new);
     }
 
     @Override
@@ -67,7 +65,8 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderNotFoundException();
         }
 
-        String status = orderRepository.getStatusByOrderId(orderId);
+        String status = orderRepository.getStatusByOrderId(orderId)
+                .orElseThrow(OrderNotFoundException::new);
 
         if (!"IN_PROGRESS".equals(status)) {
             throw new OrderImpossibleToDeleteException();
@@ -80,7 +79,30 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> getUserOrders(Long userId) {
 
         List<Order> orders = orderRepository.getOrdersByUserId(userId);
-        return orderMapper.toDtoList(orders);
+
+        List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
+
+        for (int i = 0; i < orderDtos.size(); i++) {
+
+            Long tariffId = orders.get(i).getTariffId();
+
+            String tariffType = tariffRepository.getTypeById(tariffId)
+                    .orElseThrow(() -> new IllegalArgumentException("Tariff type not found for id: " + tariffId));
+
+            orderDtos.get(i).setTariffType(tariffType);
+        }
+
+        return orderDtos;
+    }
+
+    @Override
+    public List<Order> getOrdersByStatus(String status) {
+        return orderRepository.getOrdersByStatus(status);
+    }
+
+    @Override
+    public void updateStatusAndTime(Order order) {
+        orderRepository.updateStatusAndTime(order);
     }
 
 }

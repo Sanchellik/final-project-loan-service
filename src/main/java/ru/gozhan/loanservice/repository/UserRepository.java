@@ -1,7 +1,9 @@
 package ru.gozhan.loanservice.repository;
 
+import java.util.Optional;
+
 public interface UserRepository {
 
-    Long getUserIdByUsername(String username);
+    Optional<Long> getUserIdByUsername(String username);
 
 }

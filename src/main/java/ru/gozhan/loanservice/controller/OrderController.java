@@ -1,6 +1,7 @@
 package ru.gozhan.loanservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -28,6 +29,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/loan-service")
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
 
     private final UserService userService;
@@ -76,9 +78,9 @@ public class OrderController {
     }
 
     @PostMapping("deleteOrder/{username}/{orderId}")
-    public String deleteOrder (@PathVariable("username") String username,
-                               @PathVariable("orderId") UUID orderId,
-                               Model model) {
+    public String deleteOrder(@PathVariable("username") String username,
+                              @PathVariable("orderId") UUID orderId,
+                              Model model) {
 
         RestTemplate restTemplate = new RestTemplate();
 

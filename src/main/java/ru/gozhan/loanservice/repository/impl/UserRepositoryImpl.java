@@ -7,24 +7,27 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import ru.gozhan.loanservice.repository.UserRepository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final String SELECT_USER_ID_BY_USERNAME_QUERY = "SELECT id FROM usr WHERE username = :username";
-
     @Override
-    public Long getUserIdByUsername(String username) {
+    public Optional<Long> getUserIdByUsername(String username) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("username", username);
 
-        return namedParameterJdbcTemplate.queryForObject(
+        String SELECT_USER_ID_BY_USERNAME_QUERY = "SELECT id FROM usr WHERE username = :username";
+
+        Long userId = namedParameterJdbcTemplate.queryForObject(
                 SELECT_USER_ID_BY_USERNAME_QUERY,
                 parameters,
                 Long.class
         );
+        return Optional.ofNullable(userId);
     }
 
 }

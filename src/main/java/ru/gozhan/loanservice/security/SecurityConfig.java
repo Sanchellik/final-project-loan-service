@@ -3,6 +3,7 @@ package ru.gozhan.loanservice.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -24,8 +25,6 @@ public class SecurityConfig {
 
     private final DataSource dataSource;
 
-//    private final AuthenticationConfiguration authenticationConfiguration;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -33,11 +32,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/loan-service.html",
                                 "/loan-service/getTariffs", "/loan-service/getTariffs-view",
-                                "/loan-service/order").permitAll()
+                                "/loan-service/order", "/loan-service/deleteOrder").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin()
-                    .defaultSuccessUrl("/loan-service/getTariffs-view")
+                    .defaultSuccessUrl("/")
                     .permitAll()
                 .and()
                 .logout()

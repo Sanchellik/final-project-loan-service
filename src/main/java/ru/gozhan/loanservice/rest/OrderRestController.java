@@ -23,13 +23,13 @@ public class OrderRestController {
 
     private final OrderService orderService;
 
-    @PostMapping("/order")
+    @PostMapping("order")
     public ResponseEntity<Response> makeOrder(@RequestBody CreateOrderRequest createOrderRequest) {
 
         log.info("/order START");
 
         OrderResponse orderResponse = OrderResponse.builder()
-                .orderId(orderService.orderProcessing(createOrderRequest.getUserId(), createOrderRequest.getTariffId()))
+                .orderId(orderService.createOrder(createOrderRequest.getUserId(), createOrderRequest.getTariffId()))
                 .build();
 
         SuccessResponse<OrderResponse> successResponse = SuccessResponse.<OrderResponse>builder()
@@ -40,9 +40,10 @@ public class OrderRestController {
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/getStatusOrder")
+    @GetMapping("getStatusOrder")
     public ResponseEntity<Response> getOrderStatus(@RequestParam("orderId") UUID orderId) {
 
+        log.info("/getStatusOrder START");
         OrderStatusResponse orderStatusResponse = OrderStatusResponse.builder()
                 .orderStatus(orderService.getOrderStatus(orderId))
                 .build();
@@ -51,6 +52,7 @@ public class OrderRestController {
                 .data(orderStatusResponse)
                 .build();
 
+        log.info("/getStatusOrder FINISH");
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 

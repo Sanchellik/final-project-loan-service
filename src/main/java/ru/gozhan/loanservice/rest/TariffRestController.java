@@ -1,6 +1,7 @@
 package ru.gozhan.loanservice.rest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/loan-service")
 @RequiredArgsConstructor
+@Slf4j
 public class TariffRestController {
 
     private final TariffService tariffService;
@@ -28,6 +30,8 @@ public class TariffRestController {
 
     @GetMapping("getTariffs")
     public ResponseEntity<Response> getAllTariffs() {
+        log.info("/getTariffs START");
+
         List<Tariff> tariffs = tariffService.getAllTariffs();
         List<TariffResponse> tariffResponses = tariffs.stream()
                 .map(tariffMapper::toResponse)
@@ -37,6 +41,7 @@ public class TariffRestController {
                 .tariffs(tariffResponses)
                 .build();
 
+        log.info("/getTariffs FINISH");
         return new ResponseEntity<>(SuccessResponse.builder().data(response).build(), HttpStatus.OK);
     }
 

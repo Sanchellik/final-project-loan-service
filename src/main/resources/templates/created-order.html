@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:import="ru.gozhan.loanservice.constant.ErrorCode">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Order Result</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -33,10 +33,6 @@
 
           <div class="text-center">
             <a href="http://localhost:8080/loan-service/getTariffs-view" class="btn btn-primary">Назад</a>
-
-            <a th:if="${error != null and error.code == T(ru.gozhan.loanservice.constant.ErrorCode).LOAN_CONSIDERATION}"
-               href="http://localhost:8080/loan-service/TODO/job" class="btn btn-warning mx-2">Ускорить рассмотрение
-            </a>
           </div>
 
         </div>

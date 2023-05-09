@@ -78,9 +78,9 @@ public class OrderController {
     }
 
     @PostMapping("deleteOrder/{username}/{orderId}")
-    public String deleteOrder (@PathVariable("username") String username,
-                               @PathVariable("orderId") UUID orderId,
-                               Model model) {
+    public String deleteOrder(@PathVariable("username") String username,
+                              @PathVariable("orderId") UUID orderId,
+                              Model model) {
 
         RestTemplate restTemplate = new RestTemplate();
 
